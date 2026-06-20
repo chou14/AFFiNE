@@ -4,6 +4,7 @@ import { ServersService } from '../cloud/services/servers';
 import { GlobalState } from '../storage';
 import { WorkspaceFlavoursProvider } from '../workspace';
 import { CloudWorkspaceFlavoursProvider } from './impls/cloud';
+import { ELVWorkspaceFlavoursProvider } from './impls/elv';
 import {
   LocalWorkspaceFlavoursProvider,
   setLocalWorkspaceIds,
@@ -14,6 +15,7 @@ export { base64ToUint8Array, uint8ArrayToBase64 } from './utils/base64';
 export function configureBrowserWorkspaceFlavours(framework: Framework) {
   framework
     .impl(WorkspaceFlavoursProvider('LOCAL'), LocalWorkspaceFlavoursProvider)
+    .impl(WorkspaceFlavoursProvider('ELV'), ELVWorkspaceFlavoursProvider)
     .impl(WorkspaceFlavoursProvider('CLOUD'), CloudWorkspaceFlavoursProvider, [
       GlobalState,
       ServersService,

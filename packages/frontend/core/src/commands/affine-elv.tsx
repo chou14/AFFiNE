@@ -1,6 +1,7 @@
 import { notify } from '@affine/component';
 
 import type { ELVService } from '../modules/elv';
+import type { WorkspacesService } from '../modules/workspace';
 import { registerAffineCommand } from './registry';
 
 function currentAffineObjectId() {
@@ -13,10 +14,41 @@ function stringifyCompact(value: unknown) {
 
 export function registerAffineELVCommands({
   elvService,
+  workspacesService,
 }: {
   elvService: ELVService;
+  workspacesService: WorkspacesService;
 }) {
   const unsubs: Array<() => void> = [];
+
+  unsubs.push(
+    registerAffineCommand({
+      id: 'affine:elv-create-primary-workspace',
+      category: 'affine:general',
+      icon: <span>ELV</span>,
+      label: {
+        title: 'ELV: Create AFFiNE primary workspace',
+        subTitle: 'Create an AFFiNE workspace stored through the ELV workspace flavour',
+      },
+      async run() {
+        try {
+          const metadata = await workspacesService.create('elv', async workspace => {
+            workspace.meta.initialize();
+            workspace.doc.getMap('meta').set('name', 'ELV Workspace');
+          });
+          notify.success({
+            title: 'ELV AFFiNE workspace created',
+            message: `${metadata.flavour}:${metadata.id}`,
+          });
+        } catch (error) {
+          notify.error({
+            title: 'ELV workspace creation failed',
+            message: error instanceof Error ? error.message : String(error),
+          });
+        }
+      },
+    })
+  );
 
   unsubs.push(
     registerAffineCommand({

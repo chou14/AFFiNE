@@ -6,6 +6,7 @@ import {
   cloudStorages,
   configureSocketAuthMethod,
 } from '@affine/nbstore/cloud';
+import { elvStorages } from '@affine/nbstore/elv';
 import { bindNativeDBApis, sqliteStorages } from '@affine/nbstore/sqlite';
 import {
   bindNativeDBV1Apis,
@@ -34,6 +35,7 @@ configureSocketAuthMethod((endpoint, cb) => {
 const storeManager = new StoreManagerConsumer([
   ...sqliteStorages,
   ...sqliteV1Storages,
+  ...elvStorages,
   ...broadcastChannelStorages,
   ...cloudStorages,
 ]);

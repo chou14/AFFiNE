@@ -5,6 +5,7 @@ import {
   cloudStorages,
   configureSocketAuthMethod,
 } from '@affine/nbstore/cloud';
+import { elvStorages } from '@affine/nbstore/elv';
 import { idbStoragesIndexerOnly } from '@affine/nbstore/idb';
 import {
   bindNativeDBApis,
@@ -92,6 +93,7 @@ const consumer = new OpConsumer<WorkerManagerOps>(
 const storeManager = new StoreManagerConsumer([
   ...idbStoragesIndexerOnly,
   ...sqliteStorages,
+  ...elvStorages,
   ...broadcastChannelStorages,
   ...cloudStorages,
 ]);

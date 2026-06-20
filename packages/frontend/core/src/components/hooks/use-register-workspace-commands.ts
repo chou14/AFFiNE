@@ -7,7 +7,10 @@ import {
 import { I18nService } from '@affine/core/modules/i18n';
 import { UrlService } from '@affine/core/modules/url';
 import { WorkbenchService } from '@affine/core/modules/workbench';
-import { WorkspaceService } from '@affine/core/modules/workspace';
+import {
+  WorkspaceService,
+  WorkspacesService,
+} from '@affine/core/modules/workspace';
 import { useI18n } from '@affine/i18n';
 import {
   useService,
@@ -59,6 +62,7 @@ export function useRegisterWorkspaceCommands() {
   const currentWorkspace = useService(WorkspaceService).workspace;
   const urlService = useService(UrlService);
   const elvService = useService(ELVService);
+  const workspacesService = useService(WorkspacesService);
   const pageHelper = usePageHelper(currentWorkspace.docCollection);
   const navigationHelper = useNavigateHelper();
   const {
@@ -194,10 +198,13 @@ export function useRegisterWorkspaceCommands() {
 
   // register AffineELVCommands
   useEffect(() => {
-    const unsub = registerAffineELVCommands({ elvService });
+    const unsub = registerAffineELVCommands({
+      elvService,
+      workspacesService,
+    });
 
     return () => {
       unsub();
     };
-  }, [elvService]);
+  }, [elvService, workspacesService]);
 }
