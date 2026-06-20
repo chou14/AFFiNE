@@ -23,6 +23,7 @@ import {
   PreconditionStrategy,
   registerAffineCommand,
   registerAffineCreationCommands,
+  registerAffineELVCommands,
   registerAffineHelpCommands,
   registerAffineLanguageCommands,
   registerAffineLayoutCommands,
@@ -31,6 +32,7 @@ import {
   registerAffineUpdatesCommands,
 } from '../../commands';
 import { EditorSettingService } from '../../modules/editor-setting';
+import { ELVService } from '../../modules/elv';
 import { CMDKQuickSearchService } from '../../modules/quicksearch/services/cmdk';
 import { useNavigateHelper } from './use-navigate-helper';
 
@@ -56,6 +58,7 @@ export function useRegisterWorkspaceCommands() {
   const theme = useTheme();
   const currentWorkspace = useService(WorkspaceService).workspace;
   const urlService = useService(UrlService);
+  const elvService = useService(ELVService);
   const pageHelper = usePageHelper(currentWorkspace.docCollection);
   const navigationHelper = useNavigateHelper();
   const {
@@ -188,4 +191,13 @@ export function useRegisterWorkspaceCommands() {
       unsub();
     };
   }, [t, globalDialogService, urlService, workspaceDialogService]);
+
+  // register AffineELVCommands
+  useEffect(() => {
+    const unsub = registerAffineELVCommands({ elvService });
+
+    return () => {
+      unsub();
+    };
+  }, [elvService]);
 }

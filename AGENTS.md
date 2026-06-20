@@ -35,10 +35,19 @@ Each AFFiNE document or block displays a mastery score computed by `elv-core`:
 
 ## Integration Path
 
-### Short-term (Phase 1): Python subprocess
-AFFiNE calls `elv-core` via local HTTP API or subprocess:
+### Short-term (Phase 1): Local HTTP bridge
+AFFiNE registers `ELVService` plus command-palette commands and calls `elv-core` through a local HTTP bridge:
 ```
-AFFiNE block action → HTTP → python -m elv_core.api → JSON response
+AFFiNE command → ELVService → http://127.0.0.1:8765 → python -m elv_core.api serve
+```
+Implemented first commands:
+- `affine:elv-health` checks bridge availability.
+- `affine:elv-record-learning-event` appends an AFFiNE learning event to the configured ELV vault.
+
+Configure the bridge in the browser console or app shell:
+```
+localStorage.setItem('elv.bridge.url', 'http://127.0.0.1:8765')
+localStorage.setItem('elv.vault', '/absolute/path/to/vault')
 ```
 
 ### Medium-term (Phase 2): AFFiNE plugin
